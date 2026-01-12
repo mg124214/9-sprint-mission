@@ -4,6 +4,7 @@ import entity.User;
 import service.UserService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class JCFUserService implements UserService {
 
@@ -11,8 +12,20 @@ public class JCFUserService implements UserService {
 
     public JCFUserService() {
         this.data = new ArrayList<>();
-
     }
+
+    @Override
+    public User create(String displayName, String email, String phoneNumber) {
+        User user = new User(displayName, email, phoneNumber);
+        return null;
+    }
+
+    @Override
+    public User findById(UUID userId) {
+        return null;
+    }
+
+
     @Override
     public boolean addUser(User user) {
        return data.add(user);

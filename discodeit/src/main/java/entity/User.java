@@ -10,6 +10,7 @@ public class User {
     private Long createdAt;
     private Long updatedAt;
 
+    //1. 생성자
     public User(String displayName, String email, String phoneNumber) {
         this.id = UUID.randomUUID();
         this.displayName = displayName;
@@ -20,6 +21,7 @@ public class User {
         this.updatedAt = now;
     }
 
+    //2.Getter 메서드
     public UUID getId() {
         return id;
     }
@@ -44,12 +46,14 @@ public class User {
         return updatedAt;
     }
 
-    /*public User update(String displayName, String email, String phoneNumber){
-      return
-    }*/
-    //Todo update 메서드 추가
+    public void update(String displayName, String email, String phoneNumber) {
+        this.displayName = displayName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.updatedAt = System.currentTimeMillis();
+    }
 
-
+    //3.toString
     @Override
     public String toString() {
         return "User{" +
