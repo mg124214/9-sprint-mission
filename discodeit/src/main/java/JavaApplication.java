@@ -11,7 +11,6 @@ public class JavaApplication {
 
         System.out.println("인원 추가 완료 : " + userService.getAlluser());
 
-        //userService.getAlluser();
 
 
 

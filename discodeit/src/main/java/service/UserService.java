@@ -19,9 +19,10 @@ public interface  UserService {
     List<User> getAlluser();
 
     //수정
-    User updateUser(String name, String email, String phonenumber);
+    User updateUser(UUID userId, String displayName, String email, String phoneNumber);
 
     //삭제
-    boolean deleteUser();
+    boolean deleteUser(UUID userId);
+
 
 }
