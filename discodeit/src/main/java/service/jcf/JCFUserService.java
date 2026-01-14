@@ -16,6 +16,8 @@ public class JCFUserService implements UserService {
 //1. 생성
     @Override
     public User create(String displayName, String email, String phoneNumber) {
+        if (getUser(displayName) != null)
+            throw new IllegalArgumentException("이미 존재하는 이름입니다.");
         User user = new User(displayName, email, phoneNumber);
         data.add(user);
         return user;
@@ -51,7 +53,9 @@ public class JCFUserService implements UserService {
     public List<User> getAlluser() {
         return data;
     }
+
 //3. 수정
+
     @Override
     public User updateUser(UUID userId, String displayName, String email, String phoneNumber) {
         User user = findById(userId);

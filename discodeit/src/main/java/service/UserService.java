@@ -13,7 +13,7 @@ public interface  UserService {
     boolean addUser(User user);
 
     //단건 조회
-    User getUser(String displayName);
+    User getUser(String displayName); //이름 기반 조회를 대비
 
     //다건 조회
     List<User> getAlluser();
@@ -23,6 +23,5 @@ public interface  UserService {
 
     //삭제
     boolean deleteUser(UUID userId);
-
 
 }
