@@ -28,11 +28,4 @@ public class Channel {
         this.name = name;
         this.updatedAt = System.currentTimeMillis();
     }
-
-
-
-
-
-
-
-    }
+        }

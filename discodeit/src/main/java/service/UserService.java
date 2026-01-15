@@ -22,6 +22,7 @@ public interface  UserService {
     User updateUser(UUID userId, String displayName, String email, String phoneNumber);
 
     //삭제
-    boolean deleteUser(UUID userId);
+    void deleteUser(UUID userId);
+
 
 }

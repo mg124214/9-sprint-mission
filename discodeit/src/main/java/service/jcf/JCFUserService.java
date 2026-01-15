@@ -13,7 +13,8 @@ public class JCFUserService implements UserService {
     public JCFUserService() {
         this.data = new ArrayList<>();
     }
-//1. 생성
+
+    //1. 생성
     @Override
     public User create(String displayName, String email, String phoneNumber) {
         if (getUser(displayName) != null)
@@ -22,7 +23,8 @@ public class JCFUserService implements UserService {
         data.add(user);
         return user;
     }
-//2. 조회
+
+    //2. 조회
     @Override
     public User findById(UUID userId) {
         for (User user : data) {
@@ -35,7 +37,7 @@ public class JCFUserService implements UserService {
 
     @Override
     public boolean addUser(User user) {
-       return data.add(user);
+        return data.add(user);
 
     }
 
@@ -66,17 +68,16 @@ public class JCFUserService implements UserService {
         return user;
     }
 
-//4. 삭제
+    //4. 삭제
 //Todo 삭제는 id 기준으로 구현하는 것이 맞음
 //현재 인터페이스에는 파라미터가 없어서 보류
-
     @Override
-    public boolean deleteUser(UUID userId) {
-        for (User user : data){
-            if (user.getId().equals(userId)) {
-                return data.remove(user);
-            }
+    public void deleteUser(UUID userId) {
+        boolean deleted = data.removeIf(user -> user.getId().equals(userId));
+
+        if (!deleted) {
+            throw new IllegalArgumentException("삭제할 유저가 없습니다.");
         }
-        return false;
     }
 }
+
