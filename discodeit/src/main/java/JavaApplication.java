@@ -1,4 +1,6 @@
+import entity.Channel;
 import entity.User;
+import service.ChannelService;
 import service.UserService;
 import service.jcf.JCFUserService;
 import entity.Message;
@@ -6,12 +8,13 @@ import service.MessageService;
 import service.jcf.JCFMessageService;
 import java.util.UUID;
 import java.util.List;
+import service.jcf.JCFChannelService;
 
 
 // User
 public class JavaApplication {
     static void userCRUDTest(UserService userService) {
-       System.out.println("\n===============================");
+        System.out.println("\n===============================");
         System.out.println("User 기능 테스트");
         System.out.println("===============================\n");
 
@@ -34,19 +37,17 @@ public class JavaApplication {
         System.out.println("유저 수정: " + String.join("/", updatedUser.getDisplayName(), updatedUser.getEmail(), updatedUser.getPhoneNumber()));
 
         //4.삭제
-        //Todo
-        // ㅢ,;ㅣ;ㅣㅓㅏㅣㅣ;ㅣㅏㅣ;삭제
-        userService.deleteUser(user3.getId());
         List<User> foundUsersAfterDelete = userService.getAlluser();
         try {
             userService.deleteUser(user3.getId());
             System.out.println("유저 삭제 성공");
+
         } catch (IllegalArgumentException e) {
             System.out.println("[ERROR] " + e.getMessage());
         }
 
         // 삭제 후 전체 유저 수
-        System.out.println("삭제 후 전체 유저 수 : " + userService.getAlluser().size());
+        System.out.println("삭제 후 전체 유저 수 : " + foundUsersAfterDelete.size());
 
 
         //삭제 실패 확인
@@ -58,8 +59,6 @@ public class JavaApplication {
         } catch (IllegalArgumentException e) {
             System.out.println("[삭제 실패 확인] " + e.getMessage());
         }
-
-
 
 
         //5.이름 중복 테스트 (throw)
@@ -106,20 +105,55 @@ public class JavaApplication {
         System.out.println("삭제 후 조회: " + messageService.findById(message.getId()));
     }
 
+    //Channel
+    static void channelCRUDTest(ChannelService channelService) {
+        System.out.println("\n===============================");
+        System.out.println("Channel 기능 테스트");
+        System.out.println("===============================\n");
+        // 생성
+        Channel channel = channelService.create("공지");
+        System.out.println("채널 생성: " + channel.getId());
+
+        // 조회
+        Channel foundChannel = channelService.findById(channel.getId());
+        System.out.println("채널 조회(단건): " + foundChannel.getId());
+        List<Channel> foundChannels = channelService.findAll();
+        System.out.println("채널 조회(다건): " + foundChannels.size());
+
+        // 수정
+        Channel updatedChannel = channelService.update(channel.getId(), "공지사항");
+        System.out.println("채널 수정: " + updatedChannel.getName());
+
+        // 삭제
+        channelService.delete(channel.getId());
+        List<Channel> foundChannelsAfterDelete = channelService.findAll();
+        System.out.println("채널 삭제: " + foundChannelsAfterDelete.size());
+    }
     public static void main(String[] args) {
         // 서비스 초기화
         UserService userService = new JCFUserService();
-        MessageService messageService = new JCFMessageService();
-        // ChannelService channelService = new JCFChannelService();
+        ChannelService channelService = new JCFChannelService();
+        MessageService messageService = new JCFMessageService(userService, channelService); //의존성 주입
 
-        UUID channelId = UUID.randomUUID();
-        UUID senderId = UUID.randomUUID();
+        User testUser = userService.create("박서연", "psy@naver.com", "010-0642-4142");
+        Channel testChannel = channelService.create("메시지테스트채널");
+        System.out.println("메시지 테스트 유저 생성: " + testUser.getDisplayName());
+        System.out.println("메시지 테스트 채널 생성: " + testChannel.getName());
+        System.out.println("\n[예외 테스트]");
+        try {
+            messageService.create(UUID.randomUUID(), testUser.getId(), "실패해야 함");
+        } catch (IllegalArgumentException e) {
+            System.out.println("예외 확인: " + e.getMessage());
+        }
+
+
+
+        messageCRUDTest(messageService, testChannel.getId(), testUser.getId());
 
         // 테스트
         userCRUDTest(userService);
-        messageCRUDTest(messageService, channelId, senderId);
-        //channelCRUDTest(channelService);
-
+        channelCRUDTest(channelService);
+        //messageCRUDTest(messageService, channelId, senderId);
     }
 
 }
